@@ -25,27 +25,22 @@ internal class ContainerView: UIView {
     
     private func commonInit() {
         backgroundColor = UIColor.clearColor()
-        self.translatesAutoresizingMaskIntoConstraints = false
-
         
         addSubview(backgroundView)
         addSubview(frameView)
+    }
+    
+    internal override func layoutSubviews() {
+        super.layoutSubviews()
         
-        backgroundView.topAnchor.constraintEqualToAnchor(self.topAnchor).active = true
-        backgroundView.rightAnchor.constraintEqualToAnchor(self.rightAnchor).active = true
-        backgroundView.bottomAnchor.constraintEqualToAnchor(self.bottomAnchor).active = true
-        backgroundView.leftAnchor.constraintEqualToAnchor(self.leftAnchor).active = true
-        
-        frameView.centerXAnchor.constraintEqualToAnchor(self.centerXAnchor).active = true
-        frameView.centerYAnchor.constraintEqualToAnchor(self.centerYAnchor).active = true
+        frameView.center = center
+        backgroundView.frame = bounds
     }
     
     internal func showFrameView() {
         layer.removeAllAnimations()
+        frameView.center = center
         frameView.alpha = 1.0
-        frameView.widthAnchor.constraintEqualToAnchor(frameView.content.widthAnchor).active = true
-        frameView.heightAnchor.constraintEqualToAnchor(frameView.content.heightAnchor).active = true
-
         hidden = false
     }
     
@@ -81,7 +76,6 @@ internal class ContainerView: UIView {
     
     private let backgroundView: UIView = {
         let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = UIColor(white:0.0, alpha:0.25)
         view.alpha = 0.0
         return view
