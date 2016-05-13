@@ -35,6 +35,10 @@ public class PKHUD: NSObject {
             name: UIApplicationWillEnterForegroundNotification,
             object: nil)
         userInteractionOnUnderlyingViewsEnabled = false
+        containerView.frameView.autoresizingMask = [ .FlexibleLeftMargin,
+                                              .FlexibleRightMargin,
+                                              .FlexibleTopMargin,
+                                              .FlexibleBottomMargin ]
     }
     
     public var dimsBackground = true
@@ -76,10 +80,7 @@ public class PKHUD: NSObject {
         }
         if self.containerView.superview == nil {
             view.insertSubview(self.containerView, atIndex: 9999)
-            containerView.leftAnchor.constraintEqualToAnchor(view.leftAnchor).active = true
-            containerView.topAnchor.constraintEqualToAnchor(view.topAnchor).active = true
-            containerView.rightAnchor.constraintEqualToAnchor(view.rightAnchor).active = true
-            containerView.bottomAnchor.constraintEqualToAnchor(view.bottomAnchor).active = true
+            self.containerView.frame = view.bounds
         }
         containerView.showFrameView()
         if dimsBackground {
