@@ -24,7 +24,7 @@ internal class ContainerView: UIView {
     }
     
     fileprivate func commonInit() {
-        backgroundColor = UIColor.clearColor()
+        backgroundColor = UIColor.clear
         self.translatesAutoresizingMaskIntoConstraints = false
         
         addSubview(backgroundView)
@@ -51,7 +51,7 @@ internal class ContainerView: UIView {
         
         frameView.addConstraints([width, height])
         
-        hidden = false
+        isHidden = false
     }
     
     fileprivate var willHide = false

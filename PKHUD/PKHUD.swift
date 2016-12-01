@@ -17,7 +17,7 @@ open class PKHUD: NSObject {
     }
     
     fileprivate let containerView = ContainerView()
-    fileprivate var hideTimer: NSTimer?
+    fileprivate var hideTimer: Timer?
     
     public typealias TimerAction = (Bool) -> Void
     fileprivate var timerActions = [String: TimerAction]()
@@ -44,10 +44,10 @@ open class PKHUD: NSObject {
     open var dimsBackground = true
     open var userInteractionOnUnderlyingViewsEnabled: Bool {
         get {
-            return !window.isUserInteractionEnabled
+            return !containerView.isUserInteractionEnabled
         }
         set {
-            window.isUserInteractionEnabled = !newValue
+            containerView.isUserInteractionEnabled = !newValue
         }
     }
     
@@ -75,9 +75,12 @@ open class PKHUD: NSObject {
     }
     
     public func show(onView view: UIView? = nil) {
-        guard let view = view ?? UIApplication.sharedApplication().keyWindow else {
-            return
-        }
+//        guard let view = view ?? UIApplication.shared.keyWindow else {
+//            return
+//        }
+        
+        let view = view!
+        
         if self.containerView.superview == nil {
             view.addSubview(self.containerView)
             let left = NSLayoutConstraint(item: containerView, attribute: .left, relatedBy: .equal, toItem: view, attribute: .left, multiplier: 1, constant: 0)
