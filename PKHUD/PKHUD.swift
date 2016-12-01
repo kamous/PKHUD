@@ -74,13 +74,7 @@ open class PKHUD: NSObject {
         }
     }
     
-    public func show(onView view: UIView? = nil) {
-//        guard let view = view ?? UIApplication.shared.keyWindow else {
-//            return
-//        }
-        
-        let view = view!
-        
+    public func show(onView view: UIView) {
         if self.containerView.superview == nil {
             view.addSubview(self.containerView)
             let left = NSLayoutConstraint(item: containerView, attribute: .left, relatedBy: .equal, toItem: view, attribute: .left, multiplier: 1, constant: 0)
