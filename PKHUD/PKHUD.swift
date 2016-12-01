@@ -16,8 +16,8 @@ open class PKHUD: NSObject {
         static let sharedHUD = PKHUD()
     }
     
-    fileprivate let window = Window()
-    fileprivate var hideTimer: Timer?
+    fileprivate let containerView = ContainerView()
+    fileprivate var hideTimer: NSTimer?
     
     public typealias TimerAction = (Bool) -> Void
     fileprivate var timerActions = [String: TimerAction]()
@@ -35,10 +35,6 @@ open class PKHUD: NSObject {
             name: NSNotification.Name.UIApplicationWillEnterForeground,
             object: nil)
         userInteractionOnUnderlyingViewsEnabled = false
-        window.frameView.autoresizingMask = [ .flexibleLeftMargin,
-                                              .flexibleRightMargin,
-                                              .flexibleTopMargin,
-                                              .flexibleBottomMargin ]
     }
     
     deinit {
@@ -56,39 +52,52 @@ open class PKHUD: NSObject {
     }
     
     open var isVisible: Bool {
-        return !window.isHidden
+        return !containerView.isHidden
     }
     
     open var contentView: UIView {
         get {
-            return window.frameView.content
+            return containerView.frameView.content
         }
         set {
-            window.frameView.content = newValue
+            containerView.frameView.content = newValue
             startAnimatingContentView()
         }
     }
     
     open var effect: UIVisualEffect? {
         get {
-            return window.frameView.effect
+            return containerView.frameView.effect
         }
         set {
-            window.frameView.effect = newValue
+            containerView.frameView.effect = effect
         }
     }
     
-    open func show() {
-        window.showFrameView()
+    public func show(onView view: UIView? = nil) {
+        guard let view = view ?? UIApplication.sharedApplication().keyWindow else {
+            return
+        }
+        if self.containerView.superview == nil {
+            view.addSubview(self.containerView)
+            let left = NSLayoutConstraint(item: containerView, attribute: .left, relatedBy: .equal, toItem: view, attribute: .left, multiplier: 1, constant: 0)
+            let top = NSLayoutConstraint(item: containerView, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1, constant: 0)
+            let right = NSLayoutConstraint(item: containerView, attribute: .right, relatedBy: .equal, toItem: view, attribute: .right, multiplier: 1, constant: 0)
+            let bottom = NSLayoutConstraint(item: containerView, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1, constant: 0)
+            
+            view.addConstraints([left,top,right,bottom])
+        }
+        containerView.showFrameView()
+
         if dimsBackground {
-            window.showBackground(animated: true)
+            containerView.showBackground(animated: true)
         }
         
         startAnimatingContentView()
     }
     
     open func hide(animated anim: Bool = true, completion: TimerAction? = nil) {
-        window.hideFrameView(animated: anim, completion: completion)
+        containerView.hideFrameView(animated: anim, completion: completion)
         stopAnimatingContentView()
     }
     
@@ -138,8 +147,7 @@ open class PKHUD: NSObject {
     }
     
     internal func stopAnimatingContentView() {
-        if contentView.conforms(to: PKHUDAnimating.self) {
-            let animatingContentView = contentView as! PKHUDAnimating
+        if let animatingContentView = contentView as? PKHUDAnimating {
             animatingContentView.stopAnimation?()
         }
     }
