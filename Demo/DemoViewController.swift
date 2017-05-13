@@ -19,34 +19,34 @@ class DemoViewController: UIViewController {
     }
 
     @IBAction func showAnimatedSuccessHUD(_ sender: AnyObject) {
-        HUD.flash(.success, delay: 2.0)
+        HUD.flash(.success, onView: self.view,delay: 2.0)
     }
     
     @IBAction func showAnimatedErrorHUD(_ sender: AnyObject) {
-        HUD.show(.error)
+        HUD.show(.error, onView: self.view)
         HUD.hide(afterDelay: 2.0)
     }
     
     @IBAction func showAnimatedProgressHUD(_ sender: AnyObject) {
-        HUD.show(.progress)
+        HUD.show(.progress, onView: self.view)
         
         // Now some long running task starts...
         delay(2.0) {
             // ...and once it finishes we flash the HUD for a second.
-            HUD.flash(.success, delay: 1.0)
+            HUD.flash(.success, onView: self.view, delay: 1.0)
         }
     }
     
     @IBAction func showCustomProgressHUD(_ sender: AnyObject) {
-        HUD.flash(.rotatingImage(UIImage(named: "progress")), delay: 2.0)
+        HUD.flash(.rotatingImage(UIImage(named: "progress")), onView: self.view, delay: 2.0)
     }
     
     @IBAction func showAnimatedStatusProgressHUD(_ sender: AnyObject) {
-        HUD.flash(.labeledProgress(title: "Title", subtitle: "Subtitle"), delay: 2.0)
+        HUD.flash(.labeledProgress(title: "Title", subtitle: "Subtitle"), onView: self.view, delay: 2.0)
     }
     
     @IBAction func showTextHUD(_ sender: AnyObject) {
-        HUD.flash(.label("Requesting Licence…"), delay: 2.0) { _ in
+        HUD.flash(.label("Requesting Licence…"), onView: self.view, delay: 2.0) { _ in
             print("License Obtained.")
         }
     }
